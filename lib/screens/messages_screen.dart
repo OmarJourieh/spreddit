@@ -1,3 +1,4 @@
+import 'package:first_app/constants/api.dart';
 import 'package:first_app/screens/redone_conv_screen.dart';
 import 'package:first_app/screens/redone_conversation_screen.dart';
 import 'package:flutter/material.dart';
@@ -55,8 +56,11 @@ class MessagesScreen extends StatelessWidget {
                             width: 50,
                             decoration: BoxDecoration(
                                 image: DecorationImage(
-                                  image: AssetImage(
-                                      "assets/images/profile_pic.jpg"),
+                                  image: snapshot.data[index].image == null
+                                      ? AssetImage(
+                                          "assets/images/profile_pic.jpg")
+                                      : NetworkImage(imagesRoot +
+                                          snapshot.data[index].image),
                                   fit: BoxFit.cover,
                                 ),
                                 border: Border.all(

@@ -23,7 +23,16 @@ class _FavortiesScreenState extends State<FavortiesScreen> {
     Auth user = Provider.of<AuthsProvider>(context, listen: false).user;
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-
+    print(user.email);
+    print(user.address);
+    print(user.password);
+    print(user.password);
+    print(user.password);
+    print(user.password);
+    print(user.password);
+    print(user.password);
+    print(user.password);
+    print(user.password);
     return Scaffold(
       backgroundColor: color3,
       appBar: getAppBar(title: "Favorites"),

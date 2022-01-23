@@ -1,3 +1,4 @@
+import 'package:first_app/screens/category_products_screen.dart';
 import 'package:first_app/screens/history_screen.dart';
 import 'package:first_app/screens/my_profile_screen.dart';
 import 'package:first_app/screens/redone_conv_screen.dart';
@@ -102,25 +103,42 @@ class ProductScreen extends StatelessWidget {
                             ],
                           ),
                           const Divider(height: 40),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Expanded(
-                                child: Text(
-                                  "Category:",
-                                  style: TextStyle(
-                                    color: Colors.grey,
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => CategoryProductsScreen(
+                                    id: snapshot.data.category.id,
+                                    name: snapshot.data.category.name,
                                   ),
                                 ),
-                              ),
-                              const Expanded(child: Center()),
-                              Expanded(
-                                flex: 2,
-                                child: Text(
-                                  "${'category here'}",
+                              );
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Expanded(
+                                  child: Text(
+                                    "Category:",
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ],
+                                const Expanded(child: Center()),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    "${snapshot.data.category.name}",
+                                    style: const TextStyle(
+                                      // color: Colors.blue,
+                                      fontWeight: FontWeight.bold,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                           const Divider(height: 40),
                           GestureDetector(
@@ -149,8 +167,10 @@ class ProductScreen extends StatelessWidget {
                                   child: Text(
                                     // "owner",
                                     snapshot.data.user.username,
-                                    style: TextStyle(
-                                      color: Colors.blue,
+                                    style: const TextStyle(
+                                      // color: Colors.blue,
+                                      fontWeight: FontWeight.bold,
+                                      decoration: TextDecoration.underline,
                                     ),
                                   ),
                                 ),

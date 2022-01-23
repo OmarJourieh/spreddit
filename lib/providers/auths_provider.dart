@@ -95,11 +95,6 @@ class AuthsProvider extends ChangeNotifier {
       );
       user = Auth.fromJson(jsonDecode(res2.body)['user']);
       user1 = User.fromJson(jsonDecode(res2.body)['user']);
-      // print(user.id);
-      // print(user.id);
-      // print(user.id);
-      // print(user.id);
-      //-------------------------------
     } catch (e) {
       throw e;
     }
@@ -170,6 +165,22 @@ class AuthsProvider extends ChangeNotifier {
   }
 
   Future<void> updateUser(Auth user) async {
+    http.MultipartRequest request = http.MultipartRequest(
+        "POST", Uri.parse("$API/updatedatauser/${user.id}"));
+
+    if (user.imageToSend != 'null') {
+      http.MultipartFile multipartFile =
+          await http.MultipartFile.fromPath('image', user.imageToSend);
+      request.files.add(multipartFile);
+    }
+
+    request.fields['name'] = user.username;
+    request.fields['email'] = user.email;
+    request.fields['address'] = user.address;
+    request.fields['phone'] = user.phone;
+
+    http.StreamedResponse response = await request.send();
+
     http.Response res = await http.post(
       Uri.parse(API + "/auth/update"),
       headers: <String, String>{

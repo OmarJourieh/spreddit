@@ -1,3 +1,4 @@
+import 'package:first_app/screens/edit_my_profile.dart';
 import 'package:first_app/screens/redone_conversation_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -84,14 +85,6 @@ class _MyProfileScreenState extends State<MyProfileScreen>
                       indicator: UnderlineTabIndicator(
                           borderSide: BorderSide(color: Colors.black26)),
                       tabs: const [
-                        // Text(
-                        //   "User's Information",
-                        //   style: TextStyle(fontWeight: FontWeight.bold),
-                        // ),
-                        // Text(
-                        //   "User's Products",
-                        //   style: TextStyle(fontWeight: FontWeight.bold),
-                        // ),
                         Tab(
                           text: 'User\'s Information',
                         ),
@@ -107,6 +100,8 @@ class _MyProfileScreenState extends State<MyProfileScreen>
                           Container(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 20, horizontal: 20),
+                            // height: 200,
+                            // width: 200,
                             child: Expanded(
                               child: Column(
                                 children: [
@@ -115,10 +110,19 @@ class _MyProfileScreenState extends State<MyProfileScreen>
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      const CircleAvatar(
-                                        radius: 70.0,
-                                        backgroundImage: AssetImage(
-                                            'assets/images/person.png'),
+                                      Container(
+                                        height: height * 0.3,
+                                        width: height * 0.3,
+                                        child: CircleAvatar(
+                                          radius: 70.0,
+                                          backgroundImage: snapshot
+                                                      .data[1].image ==
+                                                  null
+                                              ? const AssetImage(
+                                                  'assets/images/person.png')
+                                              : NetworkImage(imagesRoot +
+                                                  snapshot.data[1].image),
+                                        ),
                                       ),
                                       const SizedBox(
                                         height: 12.0,
@@ -191,7 +195,14 @@ class _MyProfileScreenState extends State<MyProfileScreen>
                                           children: [
                                             Expanded(
                                               child: TextButton(
-                                                onPressed: () {},
+                                                onPressed: () {
+                                                  Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                      builder: (_) =>
+                                                          EditMyProfile(),
+                                                    ),
+                                                  );
+                                                },
                                                 child: Text(
                                                   "Edit Profile",
                                                   style: TextStyle(

@@ -11,6 +11,7 @@ class Auth {
   String address;
   String phone;
   int faculty_id;
+  String imageToSend;
 
   Auth({
     this.id,
@@ -25,6 +26,7 @@ class Auth {
     this.id_university,
     this.last_name,
     this.profile_pic,
+    this.imageToSend,
   });
 
   factory Auth.fromJson(Map<String, dynamic> json) => Auth(

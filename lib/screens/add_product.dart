@@ -179,17 +179,17 @@ class _AddProductScreenState extends State<AddProductScreen> {
               ),
             ),
             Container(
-              padding: EdgeInsets.only(left: 15, right: 15),
+              padding: const EdgeInsets.only(left: 15, right: 15),
               decoration: BoxDecoration(
                 border: Border.all(
                   color: Colors.white,
                 ),
                 color: Colors.white,
-                borderRadius: BorderRadius.all(
+                borderRadius: const BorderRadius.all(
                   Radius.circular(10.0),
                 ),
               ),
-              margin: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
               child: DropdownButton<int>(
                 underline: DropdownButtonHideUnderline(child: Container()),
                 isExpanded: true,

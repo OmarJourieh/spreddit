@@ -5,6 +5,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:first_app/models/category.dart';
 import 'package:first_app/models/user.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -29,6 +30,7 @@ class Product {
     this.user,
     this.imageToSend,
     this.imageToSend2,
+    this.category,
   });
 
   int id;
@@ -44,6 +46,7 @@ class Product {
   User user;
   File imageToSend;
   String imageToSend2;
+  Category category;
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
         id: json["id"],
@@ -57,6 +60,9 @@ class Product {
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
         user: User.fromJson(json["user"]),
+        category: json['category'] != null
+            ? Category.fromJson(json['category'])
+            : null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -67,11 +73,6 @@ class Product {
         "userId": userId,
         "categoryId": categoryId,
         "isSold": isSold,
-        // "image": base64.encode(imageToSend.readAsBytesSync()),
-
-        // "created_at": createdAt.toIso8601String(),
-        // "updated_at": updatedAt.toIso8601String(),
-        // "user": user.toJson(),
       };
 }
 
