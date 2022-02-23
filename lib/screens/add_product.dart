@@ -6,6 +6,7 @@ import 'package:first_app/models/auth.dart';
 import 'package:first_app/models/category.dart';
 import 'package:first_app/models/product.dart';
 import 'package:first_app/providers/auths_provider.dart';
+import 'package:first_app/providers/preferences_provider.dart';
 import 'package:first_app/providers/products_provider.dart';
 import 'package:first_app/screens/home_screen.dart';
 import 'package:first_app/widgets/appbar.dart';
@@ -40,24 +41,23 @@ class _AddProductScreenState extends State<AddProductScreen> {
   ];
   @override
   Widget build(BuildContext context) {
+    var prefProvider = Provider.of<PreferencesProvider>(context);
     Auth user = Provider.of<AuthsProvider>(context, listen: false).user;
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    print("-------------------------");
-    print("Product name:" + name);
-    print("Product description:" + description);
-    print("Product price:" + price.toString());
-    print("-------------------------");
 
     return Scaffold(
       backgroundColor: color3,
-      appBar: getAppBar(title: "Add Product"),
+      appBar: getAppBar(
+        title: prefProvider.language == Languages.en
+            ? "Add Product"
+            : "اضافة منتج",
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             GestureDetector(
               onTap: () async {
-                print("Opening Gallery!!!");
                 XFile image =
                     await _picker.pickImage(source: ImageSource.gallery);
                 displayImage = image;
@@ -108,15 +108,18 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     this.name = value;
                   });
                 },
-                decoration: new InputDecoration(
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    disabledBorder: InputBorder.none,
-                    contentPadding: EdgeInsets.only(
-                        left: 15, bottom: 11, top: 11, right: 15),
-                    hintText: "Product Name"),
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                  contentPadding: const EdgeInsets.only(
+                      left: 15, bottom: 11, top: 11, right: 15),
+                  hintText: prefProvider.language == Languages.en
+                      ? "Product Name"
+                      : "اسم المنتج",
+                ),
               ),
             ),
             Container(
@@ -138,15 +141,18 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 },
                 keyboardType: TextInputType.multiline,
                 maxLines: 6,
-                decoration: new InputDecoration(
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    disabledBorder: InputBorder.none,
-                    contentPadding: EdgeInsets.only(
-                        left: 15, bottom: 11, top: 11, right: 15),
-                    hintText: "Description"),
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                  contentPadding: const EdgeInsets.only(
+                      left: 15, bottom: 11, top: 11, right: 15),
+                  hintText: prefProvider.language == Languages.en
+                      ? "Description"
+                      : "الوصف",
+                ),
               ),
             ),
             Container(
@@ -155,11 +161,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   color: Colors.white,
                 ),
                 color: Colors.white,
-                borderRadius: BorderRadius.all(
+                borderRadius: const BorderRadius.all(
                   Radius.circular(10.0),
                 ),
               ),
-              margin: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
               child: TextField(
                 onChanged: (value) {
                   setState(() {
@@ -167,15 +173,18 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   });
                 },
                 keyboardType: TextInputType.number,
-                decoration: new InputDecoration(
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    disabledBorder: InputBorder.none,
-                    contentPadding: EdgeInsets.only(
-                        left: 15, bottom: 11, top: 11, right: 15),
-                    hintText: "Price "),
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                  contentPadding: const EdgeInsets.only(
+                      left: 15, bottom: 11, top: 11, right: 15),
+                  hintText: prefProvider.language == Languages.en
+                      ? "Price "
+                      : "السعر",
+                ),
               ),
             ),
             Container(
@@ -194,9 +203,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 underline: DropdownButtonHideUnderline(child: Container()),
                 isExpanded: true,
                 value: selectedCategory,
-                icon: Icon(Icons.keyboard_arrow_down),
+                icon: const Icon(Icons.keyboard_arrow_down),
                 items: allCategories.map((Category value) {
-                  print("Category ID: " + selectedCategory.toString());
                   return DropdownMenuItem<int>(
                     value: value.id,
                     child: Text(value.name),
@@ -218,10 +226,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   backgroundColor: MaterialStateProperty.all(primaryColor),
                 ),
                 child: Text(
-                  "Add",
-                  style: TextStyle(color: Colors.white),
+                  prefProvider.language == Languages.en ? "Add" : "اضافة",
+                  style: const TextStyle(color: Colors.white),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   Product product = Product(
                     description: description,
                     name: name,
@@ -234,15 +242,33 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   Provider.of<ProductsProvider>(context, listen: false)
                       .addProduct(product)
                       .then((value) {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => HomeScreen()),
-                      ModalRoute.withName('/'),
-                    );
-                    // Navigator.of(context).pushReplacement(
-                    //   MaterialPageRoute(builder: (_) => HomeScreen()),
-                    // );
+                    if (value == "allow") {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => HomeScreen()),
+                        ModalRoute.withName('/'),
+                      );
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                          content: Text(
+                            prefProvider.language == Languages.en
+                                ? "Product violates our terms of service."
+                                : "لم يتم السماح بتثبيت المنتج لأنه يخالف شروط الاستخدام",
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text("OK"),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
                   });
                 },
               ),

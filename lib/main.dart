@@ -1,4 +1,5 @@
 import 'package:device_preview/device_preview.dart';
+import 'package:first_app/providers/preferences_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:first_app/providers/auths_provider.dart';
 import 'package:first_app/providers/favorites_provider.dart';
@@ -27,6 +28,7 @@ void main() {
         ChangeNotifierProvider(create: (context) => CategoriesProvider()),
         ChangeNotifierProvider(create: (context) => FavoritesProvider()),
         ChangeNotifierProvider(create: (context) => MessagesProvider()),
+        ChangeNotifierProvider(create: (context) => PreferencesProvider()),
       ],
       child: Consumer<AuthsProvider>(
         builder: (ctx, auth, _) => MaterialApp(

@@ -1,7 +1,8 @@
+import 'package:first_app/providers/preferences_provider.dart';
 import 'package:first_app/screens/category_products_screen.dart';
 import 'package:first_app/screens/history_screen.dart';
 import 'package:first_app/screens/my_profile_screen.dart';
-import 'package:first_app/screens/redone_conv_screen.dart';
+import 'package:first_app/screens/redone_conversation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:first_app/constants/api.dart';
 import 'package:first_app/constants/colors.dart';
@@ -10,7 +11,6 @@ import 'package:first_app/models/product.dart';
 import 'package:first_app/providers/auths_provider.dart';
 import 'package:first_app/providers/messages_provider.dart';
 import 'package:first_app/providers/products_provider.dart';
-import 'package:first_app/screens/conversation_screen.dart';
 import 'package:first_app/screens/edit_product_screen.dart';
 import 'package:first_app/screens/home_screen.dart';
 import 'package:first_app/widgets/appbar.dart';
@@ -24,6 +24,7 @@ class ProductScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var prefProvider = Provider.of<PreferencesProvider>(context);
     Auth user = Provider.of<AuthsProvider>(context, listen: false).user;
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
@@ -64,9 +65,11 @@ class ProductScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Expanded(
+                              Expanded(
                                 child: Text(
-                                  "Description:",
+                                  prefProvider.language == Languages.en
+                                      ? "Description:"
+                                      : "الوصف:",
                                   style: TextStyle(
                                     color: Colors.grey,
                                   ),
@@ -85,9 +88,11 @@ class ProductScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Expanded(
+                              Expanded(
                                 child: Text(
-                                  "Price:",
+                                  prefProvider.language == Languages.en
+                                      ? "Price:"
+                                      : "السعر:",
                                   style: TextStyle(
                                     color: Colors.grey,
                                   ),
@@ -97,7 +102,9 @@ class ProductScreen extends StatelessWidget {
                               Expanded(
                                 flex: 2,
                                 child: Text(
-                                  "${snapshot.data.price}  s.p.",
+                                  prefProvider.language == Languages.en
+                                      ? "${snapshot.data.price}  s.p."
+                                      : "${snapshot.data.price} ل.س.",
                                 ),
                               ),
                             ],
@@ -117,9 +124,11 @@ class ProductScreen extends StatelessWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Expanded(
+                                Expanded(
                                   child: Text(
-                                    "Category:",
+                                    prefProvider.language == Languages.en
+                                        ? "Category:"
+                                        : "الصنف:",
                                     style: TextStyle(
                                       color: Colors.grey,
                                     ),
@@ -153,9 +162,11 @@ class ProductScreen extends StatelessWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Expanded(
+                                Expanded(
                                   child: Text(
-                                    "Owner:",
+                                    prefProvider.language == Languages.en
+                                        ? "Owner:"
+                                        : "المالك:",
                                     style: TextStyle(
                                       color: Colors.grey,
                                     ),
@@ -202,8 +213,11 @@ class ProductScreen extends StatelessWidget {
                                               ),
                                             );
                                           },
-                                          child: const Text(
-                                            "Edit",
+                                          child: Text(
+                                            prefProvider.language ==
+                                                    Languages.en
+                                                ? "Edit"
+                                                : "تعديل",
                                             style:
                                                 TextStyle(color: Colors.white),
                                           ),
@@ -220,23 +234,62 @@ class ProductScreen extends StatelessWidget {
                                         ),
                                         TextButton(
                                           onPressed: () {
-                                            Provider.of<ProductsProvider>(
-                                                    context,
-                                                    listen: false)
-                                                .deleteProduct(snapshot.data.id)
-                                                .then((value) {
-                                              Navigator.pushAndRemoveUntil(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (BuildContext
-                                                            context) =>
-                                                        HomeScreen()),
-                                                ModalRoute.withName('/'),
-                                              );
-                                            });
+                                            showDialog(
+                                              context: context,
+                                              builder: (_) => AlertDialog(
+                                                content: Text(
+                                                  prefProvider.language ==
+                                                          Languages.en
+                                                      ? "Are you sure you want to delete this product?"
+                                                      : "هل انت متأكد انك تريد حذف هذا المنتج؟",
+                                                ),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: Text(
+                                                        prefProvider.language ==
+                                                                Languages.en
+                                                            ? "Cancel"
+                                                            : "الغاء"),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () async {
+                                                      Provider.of<ProductsProvider>(
+                                                              context,
+                                                              listen: false)
+                                                          .deleteProduct(
+                                                              snapshot.data.id)
+                                                          .then((value) {
+                                                        Navigator
+                                                            .pushAndRemoveUntil(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (BuildContext
+                                                                      context) =>
+                                                                  HomeScreen()),
+                                                          ModalRoute.withName(
+                                                              '/'),
+                                                        );
+                                                      });
+                                                    },
+                                                    child: Text(
+                                                        prefProvider.language ==
+                                                                Languages.en
+                                                            ? "Yes"
+                                                            : "نعم"),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
                                           },
-                                          child: const Text(
-                                            "Delete",
+                                          child: Text(
+                                            prefProvider.language ==
+                                                    Languages.en
+                                                ? "Delete"
+                                                : "حذف",
                                             style:
                                                 TextStyle(color: Colors.white),
                                           ),
@@ -284,8 +337,11 @@ class ProductScreen extends StatelessWidget {
                                                 );
                                               });
                                             },
-                                            child: const Text(
-                                              "Mark as Sold",
+                                            child: Text(
+                                              prefProvider.language ==
+                                                      Languages.en
+                                                  ? "Mark as Sold"
+                                                  : "تم البيع",
                                               style: TextStyle(
                                                   color: Colors.white),
                                             ),
@@ -335,24 +391,19 @@ class ProductScreen extends StatelessWidget {
                                 Expanded(
                                   child: TextButton(
                                     onPressed: () async {
-                                      // await Provider.of<MessagesProvider>(context,
-                                      //         listen: false)
-                                      //     .sendMessage(
-                                      //   content: "MESSAGE REGARDING " +
-                                      //       snapshot.data.name,
-                                      //   senderId: user.id,
-                                      //   receiverId: snapshot.data.user.id,
-                                      // );
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
-                                          builder: (_) => ConversationScreen(
+                                          builder: (_) =>
+                                              RedoneConversationScreen(
                                             receivingUser: snapshot.data.user,
                                           ),
                                         ),
                                       );
                                     },
-                                    child: const Text(
-                                      "Contact Owner",
+                                    child: Text(
+                                      prefProvider.language == Languages.en
+                                          ? "Contact Owner"
+                                          : "التواصل مع المالك",
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     style: ButtonStyle(

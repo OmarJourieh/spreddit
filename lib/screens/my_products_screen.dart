@@ -1,3 +1,4 @@
+import 'package:first_app/providers/preferences_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:first_app/constants/api.dart';
 import 'package:first_app/constants/colors.dart';
@@ -16,13 +17,17 @@ class MyProductsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var prefProvider = Provider.of<PreferencesProvider>(context);
     Auth user = Provider.of<AuthsProvider>(context, listen: false).user;
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       extendBody: true,
       backgroundColor: color3,
-      appBar: getAppBar(title: "My Products"),
+      appBar: getAppBar(
+          title: prefProvider.language == Languages.en
+              ? "My Products"
+              : "منتجاتي"),
       body: FutureBuilder(
         //1
         future: Provider.of<ProductsProvider>(context, listen: false)

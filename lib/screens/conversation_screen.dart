@@ -5,6 +5,7 @@ import 'package:first_app/models/auth.dart';
 import 'package:first_app/models/user.dart';
 import 'package:first_app/providers/auths_provider.dart';
 import 'package:first_app/providers/messages_provider.dart';
+import 'package:first_app/providers/preferences_provider.dart';
 import 'package:first_app/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -44,15 +45,7 @@ class _ConversationScreen2State extends State<ConversationScreen2> {
 
   @override
   Widget build(BuildContext context) {
-    // _controller = ScrollController();
-    // Timer(
-    //   Duration(milliseconds: 1100),
-    //   () => _controller.animateTo(
-    //     _controller.position.maxScrollExtent,
-    //     duration: Duration(seconds: 1),
-    //     curve: Curves.fastOutSlowIn,
-    //   ),
-    // );
+    var prefProvider = Provider.of<PreferencesProvider>(context);
     Auth user = Provider.of<AuthsProvider>(context, listen: false).user;
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;

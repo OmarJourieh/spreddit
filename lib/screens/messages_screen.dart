@@ -1,12 +1,11 @@
 import 'package:first_app/constants/api.dart';
-import 'package:first_app/screens/redone_conv_screen.dart';
+import 'package:first_app/providers/preferences_provider.dart';
 import 'package:first_app/screens/redone_conversation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:first_app/constants/colors.dart';
 import 'package:first_app/models/auth.dart';
 import 'package:first_app/providers/auths_provider.dart';
 import 'package:first_app/providers/messages_provider.dart';
-import 'package:first_app/screens/conversation_screen.dart';
 import 'package:first_app/widgets/appbar.dart';
 import 'package:first_app/widgets/bottom_navbar.dart';
 import 'package:first_app/widgets/my_drawer.dart';
@@ -17,12 +16,15 @@ class MessagesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var prefProvider = Provider.of<PreferencesProvider>(context);
     Auth user = Provider.of<AuthsProvider>(context, listen: false).user;
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: color3,
-      appBar: getAppBar(title: "Messages"),
+      appBar: getAppBar(
+          title:
+              prefProvider.language == Languages.en ? "Messages" : "الرسائل"),
       bottomNavigationBar: BottomNavBar(),
       drawer: getDrawer(height: height, width: width, context: context),
       body: FutureBuilder(
@@ -77,7 +79,9 @@ class MessagesScreen extends StatelessWidget {
                               // fontWeight: FontWeight.bold,
                             ),
                           ),
-                          subtitle: Text("Click to enter chat..."),
+                          subtitle: Text(prefProvider.language == Languages.en
+                              ? "Click to enter chat..."
+                              : "اضغط للدخول الى المحادثة"),
                         ),
                       ),
                       Divider(

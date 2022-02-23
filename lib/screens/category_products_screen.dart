@@ -97,10 +97,10 @@ class _CategoryProductsScreenState extends State<CategoryProductsScreen> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        snapshot.data[0][index].name.length <=
-                                                17
-                                            ? snapshot.data[0][index].name
-                                            : snapshot.data[0][index].name
+                                        filteredList[index].name.length <= 17
+                                            ? filteredList[index].name
+                                            : filteredList[index]
+                                                    .name
                                                     .substring(0, 17) +
                                                 "...",
                                         style: TextStyle(
@@ -135,8 +135,7 @@ class _CategoryProductsScreenState extends State<CategoryProductsScreen> {
                                       // Text(filteredList[index].name),
                                       // Expanded(child: Center()),
                                       Text(
-                                        snapshot.data[0][index].price
-                                                .toString() +
+                                        filteredList[index].price.toString() +
                                             " s.p.",
                                         style: TextStyle(
                                             fontStyle: FontStyle.italic),

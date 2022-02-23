@@ -1,5 +1,6 @@
 import 'package:first_app/constants/colors.dart';
 import 'package:first_app/providers/categories_provider.dart';
+import 'package:first_app/providers/preferences_provider.dart';
 import 'package:first_app/screens/category_products_screen.dart';
 import 'package:first_app/widgets/appbar.dart';
 import 'package:first_app/widgets/bottom_navbar.dart';
@@ -12,11 +13,14 @@ class CategoriesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var prefProvider = Provider.of<PreferencesProvider>(context);
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: color3,
-      appBar: getAppBar(title: "Categories"),
+      appBar: getAppBar(
+          title:
+              prefProvider.language == Languages.en ? "Categories" : "الأصناف"),
       bottomNavigationBar: BottomNavBar(),
       drawer: getDrawer(height: height, width: width, context: context),
       body: FutureBuilder(

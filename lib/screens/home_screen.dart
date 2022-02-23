@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:first_app/providers/preferences_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:first_app/constants/api.dart';
 import 'package:first_app/constants/colors.dart';
@@ -30,10 +31,16 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Category> modifiedCategories = List.from(allCategories);
   @override
   Widget build(BuildContext context) {
+    var prefProvider = Provider.of<PreferencesProvider>(context);
     print(modifiedCategories.length);
     print(allCategories.length);
     if (modifiedCategories.length != (allCategories.length + 1)) {
-      modifiedCategories.insert(0, Category(id: 0, name: "All", image: ""));
+      modifiedCategories.insert(
+          0,
+          Category(
+              id: 0,
+              name: prefProvider.language == Languages.en ? "All" : "الكل",
+              image: ""));
     }
     Auth user = Provider.of<AuthsProvider>(context, listen: false).user;
     double height = MediaQuery.of(context).size.height;
@@ -124,9 +131,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       filteredList =
                           snapshot.data[0].where((i) => i.isSold != 1).toList();
                     }
+                    var reversedFiltered = filteredList.reversed.toList();
 
                     // print(filteredList);
                     return GridView.builder(
+                      // reverse: true,
                       gridDelegate:
                           const SliverGridDelegateWithMaxCrossAxisExtent(
                               maxCrossAxisExtent: 200,
@@ -142,8 +151,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (_) => ProductScreen(
-                                  id: filteredList[index].id,
-                                  name: filteredList[index].name,
+                                  id: reversedFiltered[index].id,
+                                  name: reversedFiltered[index].name,
                                 ),
                               ),
                             );
@@ -160,12 +169,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                           // image: NetworkImage(snapshot.data[index].image),
                                           // image: AssetImage(
                                           //     "assets/images/product.jfif"),
-                                          image:
-                                              filteredList[index].image != null
-                                                  ? NetworkImage(imagesRoot +
-                                                      filteredList[index].image)
-                                                  : AssetImage(
-                                                      "assets/images/p1.png"),
+                                          image: reversedFiltered[index]
+                                                      .image !=
+                                                  null
+                                              ? NetworkImage(imagesRoot +
+                                                  reversedFiltered[index].image)
+                                              : AssetImage(
+                                                  "assets/images/p1.png"),
 
                                           fit: BoxFit.cover,
                                         ),
@@ -186,32 +196,28 @@ class _HomeScreenState extends State<HomeScreen> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              filteredList[index].name.length <=
+                                              reversedFiltered[index]
+                                                          .name
+                                                          .length <=
                                                       15
-                                                  ? filteredList[index].name
-                                                  : filteredList[index]
+                                                  ? reversedFiltered[index].name
+                                                  : reversedFiltered[index]
                                                           .name
                                                           .substring(0, 15) +
                                                       "...",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             ),
-                                            // Text(filteredList[index]
-                                            //         .price
-                                            //         .toString() +
-                                            //     " s.p."),
                                           ],
                                         ),
                                         decoration: BoxDecoration(
                                           color: primaryColor.withOpacity(0.2),
-                                          // borderRadius: BorderRadius.circular(5),
                                         ),
                                       ),
                                     ],
                                   ),
                                   Column(
                                     children: [
-                                      // SizedBox(height: height * 0.002),
                                       Container(
                                         padding: EdgeInsets.symmetric(
                                           vertical: height * 0.005,
@@ -222,13 +228,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            // Text(filteredList[index].name),
+                                            // Text(reversedFiltered[index].name),
                                             // Expanded(child: Center()),
                                             Text(
-                                              filteredList[index]
+                                              reversedFiltered[index]
                                                       .price
                                                       .toString() +
-                                                  " s.p.",
+                                                  (prefProvider.language ==
+                                                          Languages.en
+                                                      ? " s.p."
+                                                      : " ل.س."),
                                               style: TextStyle(
                                                   fontStyle: FontStyle.italic),
                                             ),
@@ -248,14 +257,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 right: 0,
                                 child: IconButton(
                                   onPressed: snapshot.data[1]
-                                          .contains(filteredList[index].id)
+                                          .contains(reversedFiltered[index].id)
                                       ? () {
                                           setState(() {
                                             Provider.of<FavoritesProvider>(
                                                     context,
                                                     listen: false)
                                                 .removeFromFavorites(user.id,
-                                                    filteredList[index].id);
+                                                    reversedFiltered[index].id);
                                           });
                                         }
                                       : () {
@@ -264,11 +273,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     context,
                                                     listen: false)
                                                 .addToFavorites(user.id,
-                                                    filteredList[index].id);
+                                                    reversedFiltered[index].id);
                                           });
                                         },
                                   icon: snapshot.data[1]
-                                          .contains(filteredList[index].id)
+                                          .contains(reversedFiltered[index].id)
                                       ? Icon(
                                           Icons.favorite,
                                           color: Colors.red,

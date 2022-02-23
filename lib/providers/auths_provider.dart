@@ -205,4 +205,15 @@ class AuthsProvider extends ChangeNotifier {
     // notifyListeners();
     return User.fromJson(jsonDecode(res.body));
   }
+
+  Future<String> getUserRate(int userId) async {
+    var res = await http.get(
+      Uri.parse(API + '/getaveragerate/' + userId.toString()),
+      headers: {
+        "Accept": "application/json",
+        "Access-Control_Allow_Origin": "*"
+      },
+    );
+    return res.body;
+  }
 }

@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:first_app/models/user.dart';
+import 'package:first_app/providers/preferences_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:first_app/constants/colors.dart';
 import 'package:first_app/models/auth.dart';
@@ -21,6 +22,7 @@ class getDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var prefProvider = Provider.of<PreferencesProvider>(context);
     Auth user = Provider.of<AuthsProvider>(context, listen: false).user;
     User user1 = Provider.of<AuthsProvider>(context, listen: false).user1;
     return Drawer(
@@ -55,7 +57,8 @@ class getDrawer extends StatelessWidget {
               },
               height: height,
               icon: Icons.person,
-              text: "profile",
+              text:
+                  prefProvider.language == Languages.en ? "profile" : "الحساب",
             ),
             drawerItem(
               callback: () {
@@ -65,7 +68,9 @@ class getDrawer extends StatelessWidget {
               },
               height: height,
               icon: Icons.lock_clock,
-              text: "my products",
+              text: prefProvider.language == Languages.en
+                  ? "my products"
+                  : "منتجاتي",
             ),
             drawerItem(
               callback: () {
@@ -75,7 +80,7 @@ class getDrawer extends StatelessWidget {
               },
               height: height,
               icon: Icons.history,
-              text: "history",
+              text: prefProvider.language == Languages.en ? "history" : "السجل",
             ),
             drawerItem(
               callback: () async {
@@ -86,7 +91,9 @@ class getDrawer extends StatelessWidget {
               },
               height: height,
               icon: Icons.logout,
-              text: "Log out",
+              text: prefProvider.language == Languages.en
+                  ? "Log out"
+                  : "تسجيل الخروج",
             ),
           ],
         ),

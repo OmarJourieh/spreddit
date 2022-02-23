@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:first_app/providers/preferences_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:first_app/constants/api.dart';
 import 'package:first_app/constants/colors.dart';
@@ -24,6 +25,7 @@ class _MySearchScreenState extends State<MySearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var prefProvider = Provider.of<PreferencesProvider>(context);
     print(searchQuery);
     Auth user = Provider.of<AuthsProvider>(context, listen: false).user;
     double height = MediaQuery.of(context).size.height;
@@ -66,7 +68,9 @@ class _MySearchScreenState extends State<MySearchScreen> {
                     }
                   },
                 ),
-                hintText: 'Search...',
+                hintText: prefProvider.language == Languages.en
+                    ? 'Search...'
+                    : "ابحث عن...",
                 border: InputBorder.none,
               ),
             ),

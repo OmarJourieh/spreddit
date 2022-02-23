@@ -1,3 +1,4 @@
+import 'package:first_app/providers/preferences_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:first_app/constants/api.dart';
 import 'package:first_app/constants/colors.dart';
@@ -20,22 +21,16 @@ class FavortiesScreen extends StatefulWidget {
 class _FavortiesScreenState extends State<FavortiesScreen> {
   @override
   Widget build(BuildContext context) {
+    var prefProvider = Provider.of<PreferencesProvider>(context);
     Auth user = Provider.of<AuthsProvider>(context, listen: false).user;
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    print(user.email);
-    print(user.address);
-    print(user.password);
-    print(user.password);
-    print(user.password);
-    print(user.password);
-    print(user.password);
-    print(user.password);
-    print(user.password);
-    print(user.password);
     return Scaffold(
       backgroundColor: color3,
-      appBar: getAppBar(title: "Favorites"),
+      appBar: getAppBar(
+          title: prefProvider.language == Languages.en
+              ? "Favorites"
+              : "المنتجات المفضلة"),
       bottomNavigationBar: BottomNavBar(),
       drawer: getDrawer(height: height, width: width, context: context),
       body: FutureBuilder(
@@ -43,7 +38,7 @@ class _FavortiesScreenState extends State<FavortiesScreen> {
             .getAllFavorites(user.id),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else {
             if (snapshot.hasError)
               return Center(child: Text('Error: ${snapshot.error}'));
@@ -79,7 +74,8 @@ class _FavortiesScreenState extends State<FavortiesScreen> {
                                     image: snapshot.data[index].image != null
                                         ? NetworkImage(imagesRoot +
                                             snapshot.data[index].image)
-                                        : AssetImage("assets/images/p1.png"),
+                                        : const AssetImage(
+                                            "assets/images/p1.png"),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -87,7 +83,6 @@ class _FavortiesScreenState extends State<FavortiesScreen> {
                             ),
                             Column(
                               children: [
-                                // SizedBox(height: height * 0.002),
                                 Container(
                                   padding: EdgeInsets.symmetric(
                                     vertical: height * 0.005,
@@ -104,25 +99,19 @@ class _FavortiesScreenState extends State<FavortiesScreen> {
                                             : snapshot.data[index].name
                                                     .substring(0, 15) +
                                                 "...",
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      // Text(filteredList[index]
-                                      //         .price
-                                      //         .toString() +
-                                      //     " s.p."),
                                     ],
                                   ),
                                   decoration: BoxDecoration(
                                     color: primaryColor.withOpacity(0.2),
-                                    // borderRadius: BorderRadius.circular(5),
                                   ),
                                 ),
                               ],
                             ),
                             Column(
                               children: [
-                                // SizedBox(height: height * 0.002),
                                 Container(
                                   padding: EdgeInsets.symmetric(
                                     vertical: height * 0.005,
@@ -133,19 +122,19 @@ class _FavortiesScreenState extends State<FavortiesScreen> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      // Text(filteredList[index].name),
-                                      // Expanded(child: Center()),
                                       Text(
                                         snapshot.data[index].price.toString() +
-                                            " s.p.",
-                                        style: TextStyle(
+                                            (prefProvider.language ==
+                                                    Languages.en
+                                                ? " s.p."
+                                                : " ل.س."),
+                                        style: const TextStyle(
                                             fontStyle: FontStyle.italic),
                                       ),
                                     ],
                                   ),
                                   decoration: BoxDecoration(
                                     color: primaryColor.withOpacity(0.2),
-                                    // borderRadius: BorderRadius.circular(5),
                                   ),
                                 ),
                               ],
@@ -164,7 +153,7 @@ class _FavortiesScreenState extends State<FavortiesScreen> {
                                         user.id, snapshot.data[index].id);
                               });
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.favorite,
                               color: Colors.red,
                             ),

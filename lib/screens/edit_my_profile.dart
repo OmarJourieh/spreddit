@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:first_app/constants/colors.dart';
 import 'package:first_app/models/auth.dart';
 import 'package:first_app/providers/auths_provider.dart';
+import 'package:first_app/providers/preferences_provider.dart';
 import 'package:first_app/screens/home_screen.dart';
 import 'package:first_app/screens/my_profile_screen.dart';
 import 'package:first_app/widgets/appbar.dart';
@@ -35,6 +36,7 @@ class _EditMyProfileState extends State<EditMyProfile> {
 
   @override
   Widget build(BuildContext context) {
+    var prefProvider = Provider.of<PreferencesProvider>(context);
     Auth user = Provider.of<AuthsProvider>(context).user;
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
