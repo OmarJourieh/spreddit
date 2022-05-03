@@ -15,6 +15,7 @@ class AuthsProvider extends ChangeNotifier {
   Timer _authTimer;
   Auth user;
   User user1;
+  bool showProfile = true;
 
   bool get isAuth {
     return _token != null;
@@ -59,6 +60,7 @@ class AuthsProvider extends ChangeNotifier {
 
   Future<void> login(Auth auth) async {
     try {
+      print("Trying login!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
       http.Response res = await http.post(
         Uri.parse(API + "/auth/login"),
         headers: <String, String>{
@@ -69,6 +71,7 @@ class AuthsProvider extends ChangeNotifier {
 
       if (jsonDecode(res.body)['errNum'] != null) {
         print(jsonDecode(res.body)['msg']);
+        print("FAILED login!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         throw HttpException(jsonDecode(res.body)['msg']);
       }
       String data = res.body;
@@ -94,6 +97,7 @@ class AuthsProvider extends ChangeNotifier {
         },
       );
       user = Auth.fromJson(jsonDecode(res2.body)['user']);
+      // showProfile = user.showProfile;
       user1 = User.fromJson(jsonDecode(res2.body)['user']);
     } catch (e) {
       throw e;
@@ -215,5 +219,52 @@ class AuthsProvider extends ChangeNotifier {
       },
     );
     return res.body;
+  }
+
+  Future<void> rateUser(int raterId, int ratedId, int rate) async {
+    var res = await http.get(
+      Uri.parse(API + '/rateuser/$raterId/$ratedId/$rate'),
+      headers: {
+        "Accept": "application/json",
+        "Access-Control_Allow_Origin": "*"
+      },
+    );
+  }
+
+  Future<String> hasRated(int raterId, int ratedId) async {
+    var res = await http.get(
+      Uri.parse(API + '/hasRated/$raterId/$ratedId'),
+      headers: {
+        "Accept": "application/json",
+        "Access-Control_Allow_Origin": "*"
+      },
+    );
+    print(res.body);
+    return res.body;
+  }
+
+  Future<void> hideShowProfile(int userId) async {
+    var res = await http.get(
+      Uri.parse(API + '/hideShowProfile/$userId'),
+      headers: {
+        "Accept": "application/json",
+        "Access-Control_Allow_Origin": "*"
+      },
+    );
+    user = Auth.fromJson(jsonDecode(res.body));
+    print("UPDATED USER ${user.showProfile}");
+    print("UPDATED USER ${user.showProfile}");
+    print("UPDATED USER ${user.showProfile}");
+    print("UPDATED USER ${user.showProfile}");
+    print("UPDATED USER ${user.showProfile}");
+    print("UPDATED USER ${user.showProfile}");
+    print("UPDATED USER ${user.showProfile}");
+    print("UPDATED USER ${user.showProfile}");
+    print("UPDATED USER ${user.showProfile}");
+    print("UPDATED USER ${user.showProfile}");
+    print("UPDATED USER ${user.showProfile}");
+    // showProfile = user.showProfile;
+    user1 = User.fromJson(jsonDecode(res.body));
+    print(res.body);
   }
 }

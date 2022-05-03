@@ -41,6 +41,12 @@ class ProductScreen extends StatelessWidget {
             if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else {
+              print(snapshot.data);
+              print(snapshot.data);
+              print(snapshot.data);
+              print(snapshot.data);
+              print(snapshot.data);
+              print(snapshot.data.name);
               return SingleChildScrollView(
                 child: Column(
                   children: [

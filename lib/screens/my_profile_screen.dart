@@ -1,5 +1,6 @@
 import 'package:first_app/providers/preferences_provider.dart';
 import 'package:first_app/screens/edit_my_profile.dart';
+import 'package:first_app/screens/rate_screen.dart';
 import 'package:first_app/screens/redone_conversation_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,8 @@ class _MyProfileScreenState extends State<MyProfileScreen>
     _tabController.dispose();
   }
 
+  int _currentRate = 0;
+  bool showProfile = true;
   // get color3 => null;
   @override
   Widget build(BuildContext context) {
@@ -49,6 +52,15 @@ class _MyProfileScreenState extends State<MyProfileScreen>
     Auth currentUser = Provider.of<AuthsProvider>(context, listen: false).user;
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    // showProfile = widget.user.showProfile == 1;
+    // print(showProfile);
+    // print(showProfile);
+    // print(showProfile);
+    // print(showProfile);
+    // print(showProfile);
+    // print(showProfile);
+    // print(showProfile);
+    // print(showProfile);
 
     bool isMyProfile = (currentUser.id == widget.user.id);
     print(isMyProfile);
@@ -72,6 +84,8 @@ class _MyProfileScreenState extends State<MyProfileScreen>
               .getUserById(widget.user.id),
           Provider.of<AuthsProvider>(context, listen: false)
               .getUserRate(widget.user.id),
+          Provider.of<AuthsProvider>(context, listen: false)
+              .hasRated(currentUser.id, widget.user.id),
         ]),
         // ignore: missing_return
         builder: (context, snapshot) {
@@ -81,6 +95,7 @@ class _MyProfileScreenState extends State<MyProfileScreen>
             if (snapshot.hasError)
               return Center(child: Text('Error: ${snapshot.error}'));
             else {
+              showProfile = snapshot.data[1].showProfile == 1;
               List<Product> filteredList =
                   snapshot.data[0].where((i) => i.isSold != 1).toList();
               return SafeArea(
@@ -157,51 +172,69 @@ class _MyProfileScreenState extends State<MyProfileScreen>
                                               ),
                                             ),
                                           ),
-                                          Card(
-                                            child: ListTile(
-                                              leading: Icon(
-                                                Icons.location_city,
-                                                color: Colors.cyan[700],
-                                              ),
-                                              title: Text(
-                                                snapshot.data[1].address,
-                                                style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 20.0,
-                                                    color: Colors.black87),
-                                              ),
-                                            ),
-                                          ),
-                                          Card(
-                                            child: ListTile(
-                                              leading: Icon(
-                                                Icons.phone,
-                                                color: Colors.cyan[700],
-                                              ),
-                                              title: Text(
-                                                snapshot.data[1].phone,
-                                                style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 20.0,
-                                                    color: Colors.black87),
-                                              ),
-                                            ),
-                                          ),
-                                          Card(
-                                            child: ListTile(
-                                              leading: Icon(
-                                                Icons.email,
-                                                color: Colors.cyan[700],
-                                              ),
-                                              title: Text(
-                                                snapshot.data[1].email,
-                                                style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 20.0,
-                                                    color: Colors.black87),
-                                              ),
-                                            ),
-                                          ),
+                                          (showProfile ||
+                                                  (currentUser.id ==
+                                                      widget.user.id))
+                                              ? Card(
+                                                  child: ListTile(
+                                                    leading: Icon(
+                                                      Icons.location_city,
+                                                      color: Colors.cyan[700],
+                                                    ),
+                                                    title: Text(
+                                                      snapshot.data[1].address,
+                                                      style: const TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 20.0,
+                                                          color:
+                                                              Colors.black87),
+                                                    ),
+                                                  ),
+                                                )
+                                              : Container(),
+                                          (showProfile ||
+                                                  (currentUser.id ==
+                                                      widget.user.id))
+                                              ? Card(
+                                                  child: ListTile(
+                                                    leading: Icon(
+                                                      Icons.phone,
+                                                      color: Colors.cyan[700],
+                                                    ),
+                                                    title: Text(
+                                                      snapshot.data[1].phone,
+                                                      style: const TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 20.0,
+                                                          color:
+                                                              Colors.black87),
+                                                    ),
+                                                  ),
+                                                )
+                                              : Container(),
+                                          (showProfile ||
+                                                  (currentUser.id ==
+                                                      widget.user.id))
+                                              ? Card(
+                                                  child: ListTile(
+                                                    leading: Icon(
+                                                      Icons.email,
+                                                      color: Colors.cyan[700],
+                                                    ),
+                                                    title: Text(
+                                                      snapshot.data[1].email,
+                                                      style: const TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 20.0,
+                                                          color:
+                                                              Colors.black87),
+                                                    ),
+                                                  ),
+                                                )
+                                              : Container(),
                                           Card(
                                             child: ListTile(
                                               leading: Icon(
@@ -290,43 +323,81 @@ class _MyProfileScreenState extends State<MyProfileScreen>
                                                     ),
                                                   ],
                                                 ),
-                                                Row(
-                                                  children: [
-                                                    Expanded(
-                                                      child: TextButton(
-                                                        onPressed: () {
-                                                          Navigator.of(context)
-                                                              .push(
-                                                            MaterialPageRoute(
-                                                              builder: (_) =>
-                                                                  RedoneConversationScreen(
-                                                                      receivingUser:
-                                                                          widget
-                                                                              .user),
+                                                snapshot.data[3] == "no"
+                                                    ? Row(
+                                                        children: [
+                                                          Expanded(
+                                                            child: TextButton(
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .push(MaterialPageRoute(
+                                                                        builder: (_) => RateScreen(
+                                                                              user: widget.user,
+                                                                            )));
+                                                              },
+                                                              child: Text(
+                                                                prefProvider.language ==
+                                                                        Languages
+                                                                            .en
+                                                                    ? "Rate ${widget.user.username}"
+                                                                    : "${widget.user.username} قيم",
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                ),
+                                                              ),
+                                                              style:
+                                                                  ButtonStyle(
+                                                                backgroundColor:
+                                                                    MaterialStateProperty
+                                                                        .all(
+                                                                            primaryColor),
+                                                              ),
                                                             ),
-                                                          );
-                                                        },
-                                                        child: Text(
-                                                          prefProvider.language ==
-                                                                  Languages.en
-                                                              ? "Contact ${widget.user.username}"
-                                                              : "${widget.user.username} تواصل مع",
-                                                          style: TextStyle(
-                                                            color: Colors.white,
                                                           ),
-                                                        ),
-                                                        style: ButtonStyle(
-                                                          backgroundColor:
-                                                              MaterialStateProperty
-                                                                  .all(
-                                                                      primaryColor),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
+                                                        ],
+                                                      )
+                                                    : Row(),
                                               ],
                                             ),
+                                      widget.user.id == currentUser.id
+                                          ? Center(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  const Text(
+                                                    "Hide Profile",
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  Switch(
+                                                      value: showProfile,
+                                                      onChanged: (value) async {
+                                                        showProfile = value;
+                                                        await Provider.of<
+                                                                    AuthsProvider>(
+                                                                context,
+                                                                listen: false)
+                                                            .hideShowProfile(
+                                                                currentUser.id);
+                                                        setState(() {});
+                                                      }),
+                                                  const Text(
+                                                    "Show Profile",
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          : Center(),
                                     ],
                                   ),
                                 ),
@@ -443,7 +514,7 @@ class _MyProfileScreenState extends State<MyProfileScreen>
                                                                       .language ==
                                                                   Languages.en
                                                               ? " s.p."
-                                                              : "ل.س. "),
+                                                              : " ل.س."),
                                                       style: TextStyle(
                                                           fontStyle:
                                                               FontStyle.italic),

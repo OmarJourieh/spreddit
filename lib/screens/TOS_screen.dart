@@ -19,6 +19,8 @@ class TOSScreen extends StatelessWidget {
           SizedBox(height: 40),
           Text("SPREDDIT team:"),
           SizedBox(height: 20),
+          Text("Dr. Haidar Al-Shammary"),
+          SizedBox(height: 20),
           Text("Ehab A. Jalab"),
           SizedBox(height: 10),
           Text("Mamdouh Y. Youssef"),

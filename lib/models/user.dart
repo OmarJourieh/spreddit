@@ -12,6 +12,7 @@ class User {
     this.isAdmin,
     this.createdAt,
     this.updatedAt,
+    this.showProfile,
   });
 
   int id;
@@ -24,6 +25,7 @@ class User {
   dynamic isAdmin;
   DateTime createdAt;
   DateTime updatedAt;
+  int showProfile;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
@@ -36,6 +38,7 @@ class User {
         isAdmin: json["isAdmin"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
+        showProfile: json['showProfile'],
       );
 
   Map<String, dynamic> toJson() => {

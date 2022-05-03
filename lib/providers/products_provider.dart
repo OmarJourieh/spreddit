@@ -82,16 +82,16 @@ class ProductsProvider extends ChangeNotifier {
   }
 
   Future<String> addProduct(Product product) async {
-    http.MultipartRequest mlRequest =
-        http.MultipartRequest("POST", Uri.parse("http://192.168.43.128:5000/"));
-    http.MultipartFile multipartFile2 =
-        await http.MultipartFile.fromPath('image', product.imageToSend2);
-    mlRequest.files.add(multipartFile2);
-    http.StreamedResponse mlResponse = await mlRequest.send();
-    var RES = await http.Response.fromStream(mlResponse);
-    if (RES.body == "1") {
-      return "deny";
-    }
+    // http.MultipartRequest mlRequest =
+    //     http.MultipartRequest("POST", Uri.parse("http://192.168.43.128:5000/"));
+    // http.MultipartFile multipartFile2 =
+    //     await http.MultipartFile.fromPath('image', product.imageToSend2);
+    // mlRequest.files.add(multipartFile2);
+    // http.StreamedResponse mlResponse = await mlRequest.send();
+    // var RES = await http.Response.fromStream(mlResponse);
+    // if (RES.body == "1") {
+    //   return "deny";
+    // }
 
     http.MultipartRequest request =
         http.MultipartRequest("POST", Uri.parse("$API/addproduct"));

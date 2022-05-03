@@ -12,11 +12,13 @@ class Auth {
   String phone;
   int faculty_id;
   String imageToSend;
+  int showProfile;
 
   Auth({
     this.id,
     this.password,
     this.email,
+    this.showProfile,
     this.username,
     this.address,
     this.phone,
@@ -39,6 +41,7 @@ class Auth {
         profile_pic: json["profile_pic"],
         password: json["password"],
         faculty_id: json["faculty_id"],
+        showProfile: json["showProfile"],
       );
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -53,6 +56,7 @@ class Auth {
         'address': address,
         'phone': phone,
         'faculty_id': faculty_id,
+        // 'showProfile': 1,
       };
 }
 
